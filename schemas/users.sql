@@ -1,6 +1,5 @@
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
-    -- uuid UUID DEFAULT gen_random_uuid() NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     username VARCHAR(255) UNIQUE NOT NULL,
     password_hash VARCHAR(255), -- Nullable if using OAuth2
@@ -10,7 +9,6 @@ CREATE TABLE IF NOT EXISTS users (
     last_name VARCHAR(100),
     profile_picture_url TEXT, -- URL to the profile picture stored on S3 or Cloudinary
     bio TEXT, -- User's bio
-    -- location VARCHAR(255), -- Optional location information
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW(),
     last_login TIMESTAMPTZ
