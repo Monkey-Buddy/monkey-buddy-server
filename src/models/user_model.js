@@ -11,19 +11,19 @@ const User = {
     return result.rows[0];
   },
 
-  async createUser(email, username, passwordHash, oauthProvider, oauthId, firstName, lastName, profilePictureUrl, bio) {
+  async createUser(email, passwordHash, oauthProvider, oauthId, firstName, lastName, profilePictureUrl, bio) {
     const result = await pool.query(
-      `INSERT INTO users (email, username, password_hash, oauth_provider, oauth_id, first_name, last_name, profile_picture_url, bio)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id`,
-      [email, username, passwordHash, oauthProvider, oauthId, firstName, lastName, profilePictureUrl, bio]
+      `INSERT INTO users (email, password_hash, oauth_provider, oauth_id, first_name, last_name, profile_picture_url, bio)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`,
+      [email, passwordHash, oauthProvider, oauthId, firstName, lastName, profilePictureUrl, bio]
     );
     return result.rows[0].id;
   },
 
   async updateUser(userId, fields) {
-    const setClause = Object.keys(fields).map((key, i) => `${key} = ${i + 2}`).join(", ");
-    const values = [userId, ...Object.keys(fields)];
-
+    const setClause = Object.keys(fields).map((key, i) => `${key} = $${i + 2}`).join(", ");
+    const values = [userId, ...Object.values(fields)];
+    console.log(setClause);
     const result = await pool.query(
       `UPDATE users SET ${setClause}, updated_at = NOW() WHERE id = $1 RETURNING *`,
       values
@@ -36,7 +36,7 @@ const User = {
     return result.rows[0];
   },
 
-  async findUserByEmail(email) {
+  async getUserByEmail(email) {
     const result = await pool.query('SELECT * FROM users where email = $1', [email]);
     return result.rows[0];
   }
