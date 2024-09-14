@@ -11,8 +11,6 @@ router.post('/:userId', userController.updateUser);
 
 router.delete('/:userId', userController.deleteUser);
 
-router.get('/profile', checkJwt, (req, res) => {
-  res.send('This is a protected profile route.');
-});
+
 
 module.exports = router;
